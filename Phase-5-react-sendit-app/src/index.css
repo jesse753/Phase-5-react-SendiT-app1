@@ -16,6 +16,62 @@ a {
     width: 100vw;
     height: 100vh;
     margin-top: 65px;
+    .App {
+        text-align: center;
+      }
+      
+      .mother {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 0 20px;
+      }
+      
+      .delivery-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      
+      .delivery-details {
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      .delivery-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      
+      .form-group {
+        margin-bottom: 10px;
+      }
+      
+      .form-group label {
+        display: block;
+        font-weight: bold;
+      }
+      
+      .form-group input {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .btn:hover {
+        background-color: #0056b3;
+      }
 }
 button {
     background-color: blue;
