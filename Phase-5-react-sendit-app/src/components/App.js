@@ -60,6 +60,12 @@ const App = () => {
     setTotalCost(0);
   };
 
+  const handleUpdateDestination = () => {
+    setOrderSubmitted(false);
+    setDistance('');
+    setTotalCost(0);
+  };
+
   const isSubmitDisabled = !distance || !pickupAddress || !destinationAddress || !parcelWeight;
 
   return (
@@ -100,6 +106,7 @@ const App = () => {
           <p>Distance: {distance}</p>
           <p>Parcel Weight: {parcelWeight}</p>
           <p>Total Cost: {totalCost}</p>
+          <button onClick={handleUpdateDestination}>Change Destination</button>
         </div>
       )}
     </div>
