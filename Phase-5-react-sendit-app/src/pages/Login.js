@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { authenticate } from '../utils';
+import axios from "axios";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,39 +17,42 @@ const Login = () => {
         const { name, value } = e.target;
         setLoginData((prevData) => ({ ...prevData, [name]: value }));
     };
-    const handleSubmit = (e) => {
+    
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
         try {
-            const storedCredentials = localStorage.getItem("userCredentials");
-            const parsedCredentials = JSON.parse(storedCredentials);
-            if (
-                parsedCredentials &&
-                parsedCredentials.email === loginData.email &&
-                parsedCredentials.password === loginData.password
-            ) {
-                // Successful login
-                console.log("Login Successful");
-                setError(null);
-                // Clear the login form
-                navigate("/hero");
-                setLoginData({
-                    email: "",
-                    password: "",
-                });
-            } else {
-                // Failed login
-                console.log("Login Failed");
-                setError("Login Failed");
-                // Clear the login form
-                setLoginData({
-                    email: "",
-                    password: "",
-                });
-            }
+          const response = await axios.post('http://localhost:3000/api/login', data);
+          const { token } = response.data;
+          authenticate(token);
+      
+          if (response.status === 202) {
+            // Successful login
+            console.log('Login Successful');
+            setError(null);
+            // Clear the login form
+            navigate('/hero');
+            setLoginData({
+              email: '',
+              password: '',
+            });
+          } else {
+            // Failed login
+            console.log('Login Failed');
+            setError('Login Failed');
+            // Clear the login form
+            setLoginData({
+              email: '',
+              password: '',
+            });
+          }
         } catch (error) {
-            console.error("Error parsing user credentials:", error);
+          console.error('Error logging in:', error);
+          setError('An error occurred while logging in');
         }
-    };
+      };
 
     return (
         <div className="sign-up">
