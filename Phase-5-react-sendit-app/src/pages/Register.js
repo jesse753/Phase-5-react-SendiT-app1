@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import "../styles/register.css";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import { authenticate } from '../utils'
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -10,28 +12,56 @@ const Register = () => {
         confirmPassword: "",
     });
 
-    useEffect(() => {
-        localStorage.setItem("userCredentials", JSON.stringify(formData));
-    }, [formData]);
+    // useEffect(() => {
+    //     localStorage.setItem("userCredentials", JSON.stringify(formData));
+    // }, [formData]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-
-    const handleSubmit = (e) => {
+    
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     // Perform form validation and submission logic here
+    //     // localStorage.setItem("userCredentials", JSON.stringify(formData));
+    //     //RESET THE FORM
+    //     setFormData({
+    //         username: "",
+    //         email: "",
+    //         password: "",
+    //         confirmPassword: "",
+    //     });
+    // };
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform form validation and submission logic here
-        // localStorage.setItem("userCredentials", JSON.stringify(formData));
-        //RESET THE FORM
-        setFormData({
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        });
-    };
-
+        try {
+          const response = await axios.post('http://localhost:3000/api/signup', {user: {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword,
+          }},);
+          const { token } = await response.data;
+        authenticate(token);
+          if (response.status === 201) {
+            // Successful form submission
+            console.log('Form submitted successfully');
+            // Reset the form
+            setFormData({
+              name: '',
+              email: '',
+              password: '',
+              confirmPassword: '',
+            });
+          } else {
+            // Form submission failed
+            console.log('Form submission failed');
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+        }
+      };
     return (
         <div className="sign-up">
             <div className="sign-header">
